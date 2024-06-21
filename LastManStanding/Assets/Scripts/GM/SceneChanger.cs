@@ -43,19 +43,19 @@ public class SceneChanger : MonoBehaviour
             return inst; 
         } 
     }
-    //메인화면으로 씬 전환 함수
+    //로비로 씬 전환 함수
     public void MoveToLobbyScene() 
     {
         SceneManager.LoadScene("Lobby", LoadSceneMode.Single);
+    }
+    //메인화면으로 씬 전환 함수
+    public void MoveToMainMenuScene()
+    {
+        SceneManager.LoadScene("MainMenu", LoadSceneMode.Single);
     }
     //인게임화면으로 씬 전환 함수
     public void MoveToGameScene()
     {
         SceneManager.LoadScene("InGame", LoadSceneMode.Single);
-    }
-    //옵션화면으로 씬 전환 함수
-    public void AdditiveOptionScene()
-    {
-        SceneManager.LoadScene("Option", LoadSceneMode.Additive);
     }
 }
