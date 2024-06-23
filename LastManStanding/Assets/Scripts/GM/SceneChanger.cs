@@ -13,7 +13,7 @@ using UnityEngine.SceneManagement;
 
 public class SceneChanger : MonoBehaviour
 {
-   private static SceneChanger inst;
+    private static SceneChanger inst;
 
     void Awake()
     {
@@ -41,7 +41,7 @@ public class SceneChanger : MonoBehaviour
             }
 
             return inst; 
-        } 
+        }
     }
     //메인화면으로 씬 전환 함수
     public void MoveToLobbyScene() 
@@ -49,9 +49,9 @@ public class SceneChanger : MonoBehaviour
         SceneManager.LoadScene("MainMenu", LoadSceneMode.Single);
     }
     //인게임화면으로 씬 전환 함수
-    public void MoveToRoomScene()
+    public void MoveToWaitingRoomScene()
     {
-        SceneManager.LoadScene("GameRoom", LoadSceneMode.Single);
+        SceneManager.LoadScene("WaitingRoom", LoadSceneMode.Single);
     }
     //인게임화면으로 씬 전환 함수
     public void MoveToInGameScene()

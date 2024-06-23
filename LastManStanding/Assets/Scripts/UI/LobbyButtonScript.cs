@@ -1,31 +1,48 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class LobbyButtonScript : MonoBehaviour
 {
     [SerializeField]
-    GameObject SettingsUIObject;
+    GameObject settingsUIObject;
+    [SerializeField]
+    GameObject networkObject;
+    [SerializeField]
+    TMP_InputField HostRoomName;
+    [SerializeField]
+    TMP_InputField JoinRoomName;
+    [SerializeField]
+    Toggle HostToggleValue;
 
     private void Start()
     {
-        SettingsUIObject.SetActive(false);
+        if(settingsUIObject != null)
+        {
+           settingsUIObject.SetActive(false);
+        }
     }
     public void MoveToHostScene()
     {
-        SceneChanger.Instance.MoveToRoomScene();
+        GameManagerScript.Instance.SaveValue(0, HostRoomName.text, HostToggleValue.isOn);
+        networkObject.GetComponent<TestNetwork>().HostConnect(HostRoomName.text, HostToggleValue.isOn);
+        //SceneChanger.Instance.MoveToWaitingRoomScene();
     }
-    public void MoveToHostRoomScene()
+    public void MoveToWaitingRoomScene()
     {
-        SceneChanger.Instance.MoveToRoomScene();
+        GameManagerScript.Instance.SaveValue(1, JoinRoomName.text, HostToggleValue.isOn);
+        networkObject.GetComponent<TestNetwork>().JoinConnect(JoinRoomName.text);
+        //SceneChanger.Instance.MoveToWaitingRoomScene();
     }
     public void OnSettingsUI()
     {
-        SettingsUIObject.SetActive(true);
+        settingsUIObject.SetActive(true);
     }
     public void OffSettingsUI()
     {
-        SettingsUIObject.SetActive(false);
+        settingsUIObject.SetActive(false);
     }
     public void QuitGame()
     {
