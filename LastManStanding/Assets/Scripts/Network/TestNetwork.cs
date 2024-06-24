@@ -65,6 +65,7 @@ public class TestNetwork : MonoBehaviourPunCallbacks
     public override void OnJoinedRoom()
     {
         Debug.Log("Enter Room");
+        //대기실 씬으로 이동
         SceneChanger.Instance.MoveToWaitingRoomScene();
     }
     //방 입장에 실패하면 호출

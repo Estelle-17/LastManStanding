@@ -1,48 +1,30 @@
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GameManagerScript : MonoBehaviour
+public class GameManagerScript : MonoBehaviourPunCallbacks
 {
-    private static GameManagerScript inst;
+    public GameObject playerPrefab;
+    public PlayerCameraWork cameraArm;
 
-    int hostOrJoin; //0 : host, 1 : join
-    string roomName;
-    bool isRoomVisible;
-
-    void Awake()
+    private void Start()
     {
-        if (null == inst)
+        if(playerPrefab == null)
         {
-            inst = this;
-
-            //씬 전환이 되더라도 파괴되지 않도록 함
-            DontDestroyOnLoad(this.gameObject);
+            Debug.LogError("playerPrefab이 설정되지 않았습니다.");
         }
         else
         {
-            //이미 만들어진 인스턴스를 사용하기 위해 새로운 씬에 같은 SceneChanger가 존재할 경우 삭제해줌
-            Destroy(this.gameObject);
-        }
-    }
-
-    public static GameManagerScript Instance
-    {
-        get
-        {
-            if (inst == null)
+            if (PlayerManager.LocalPlayerInstance == null)
             {
-                return null;
+                Debug.Log("로컬플레이어를 생성합니다.");
+                cameraArm.targetObject = PhotonNetwork.Instantiate(this.playerPrefab.name, new Vector3(0f, 5f, 0f), Quaternion.identity, 0);
             }
-
-            return inst;
+            else
+            {
+                Debug.Log("이미 로컬플레이어가 생성되어있어 새로 생성하지 않습니다.");
+            }
         }
-    }
-
-    public void SaveValue(int i, string r, bool b)
-    {
-        hostOrJoin = i;
-        roomName = r;
-        isRoomVisible = b;
     }
 }
