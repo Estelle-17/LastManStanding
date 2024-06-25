@@ -15,7 +15,9 @@ public class PlayerCameraWork : MonoBehaviourPun
     [SerializeField]
     private float smoothSpeed = 10f;
     [SerializeField]
-    private float lookSensitivity = 5f;
+    private float verticalLookSensitivity = 6f;
+    [SerializeField]
+    private float horizontalLookSensitivity = 3f;
     [SerializeField]
     LayerMask layerMask;
     [SerializeField]
@@ -89,8 +91,8 @@ public class PlayerCameraWork : MonoBehaviourPun
     {
         Vector2 input = context.ReadValue<Vector2>();
 
-        float angleX = -input.x * Time.deltaTime * lookSensitivity;
-        float angleY = input.y * Time.deltaTime * lookSensitivity;
+        float angleX = input.x * Time.deltaTime * verticalLookSensitivity;
+        float angleY = -input.y * Time.deltaTime * horizontalLookSensitivity;
 
         //x값은 eulerAngle로는 각도 제한을 주기 어렵기 때문에 따로 계산
         xRotate = Mathf.Clamp(xRotate + angleY, -45, 50);

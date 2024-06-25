@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Windows;
 
 public class PlayerAnimatorManager : MonoBehaviourPun
 {
@@ -11,9 +12,12 @@ public class PlayerAnimatorManager : MonoBehaviourPun
     private Animator animator;
 
     [SerializeField]
-    float moveSpeed = 5;
+    float moveSpeed = 2.5f;
+    [SerializeField]
+    float runSpeed = 5f;
     [SerializeField]
     float turnSpeed = 25;
+
     Vector2 input;
 
     void Start()
@@ -39,14 +43,58 @@ public class PlayerAnimatorManager : MonoBehaviourPun
             return;
         }
 
-        MoveAndRotate();
+        //현재 적용중인 애니메이터
+        AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
+
+        if(input.magnitude != 0)
+        {
+            animator.SetBool("IsMove", true);
+        }
+        else
+        {
+            animator.SetBool("IsMove", false);
+        }
+
+        //공격후 IsAttack의 파라미터를 false로 변경
+        if (stateInfo.IsName("Base Layer.Attack"))
+        {
+            animator.SetBool("IsAttack", false);
+        }
+    }
+    //플레이어의 움직임은 FixedUpdate에서 진행
+    private void FixedUpdate()
+    {
+        if (photonView.IsMine == false && PhotonNetwork.IsConnected == true)
+        {
+            return;
+        }
+
+        if (!animator)
+        {
+            return;
+        }
+
+        //현재 적용중인 애니메이터
+        AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
+
+        //공격 시 잠깐 앞으로 이동
+        if (animator.GetBool("IsAttack"))
+        {
+            AttackMove();
+        }
+
+        //공격중에는 이동 불가능
+        if (!stateInfo.IsName("Base Layer.Attack") && !animator.GetBool("IsAttack"))
+        {
+            MoveAndRotate();
+        }
     }
 
     #endregion
 
     private void MoveAndRotate()
     {
-        if (input != null)
+        if (input != null && input.magnitude != 0)
         {
             //메인 카메라 transform
             Transform camera = Camera.main.transform;
@@ -58,12 +106,43 @@ public class PlayerAnimatorManager : MonoBehaviourPun
 
             transform.rotation = Quaternion.Lerp(transform.rotation, viewRot, turnSpeed * Time.deltaTime);
 
-            transform.position += moveDir * Time.deltaTime * moveSpeed;
+            if(animator.GetBool("IsRun"))
+                transform.position += moveDir * Time.deltaTime * runSpeed;
+            else
+                transform.position += moveDir * Time.deltaTime * moveSpeed;
         }
     }
-
+    private void AttackMove()
+    {
+        transform.position += transform.forward * Time.deltaTime * runSpeed;
+    }
+    #region InputSystem Callback
     public void OnMove(InputAction.CallbackContext context)
     {
         input = context.ReadValue<Vector2>();
+    }
+    public void OnRun(InputAction.CallbackContext context)
+    {
+        //키 입력이 시작된 경우
+        if (context.started)
+        {
+            animator.SetBool("IsRun", true);
+        }
+
+        //키 입력이 끝날 경우
+        if(context.canceled)
+        {
+            animator.SetBool("IsRun", false);
+        }
+    }
+    #endregion
+
+    public void OnAttack(InputAction.CallbackContext context)
+    {
+        //키 입력이 시작된 경우
+        if (context.started)
+        {
+            animator.SetBool("IsAttack", true);
+        }
     }
 }

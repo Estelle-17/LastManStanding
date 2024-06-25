@@ -202,7 +202,8 @@ MonoBehaviour:
   distance: -6
   height: 3
   smoothSpeed: 10
-  lookSensitivity: 5
+  verticalLookSensitivity: 6
+  horizontalLookSensitivity: 3
   layerMask:
     serializedVersion: 2
     m_Bits: 0
