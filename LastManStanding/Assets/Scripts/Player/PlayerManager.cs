@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerManager : MonoBehaviourPunCallbacks
+public class PlayerManager : MonoBehaviourPunCallbacks, IPunObservable
 {
     public static GameObject LocalPlayerInstance;
 
@@ -15,4 +15,20 @@ public class PlayerManager : MonoBehaviourPunCallbacks
         }
         DontDestroyOnLoad(this.gameObject);
     }
+
+    #region IPunObservable Implementation
+
+    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+    {
+        if(stream.IsWriting)
+        {
+            //값 동기화시 여기에 코드 입력
+        }
+        else
+        {
+
+        }
+    }
+
+    #endregion
 }

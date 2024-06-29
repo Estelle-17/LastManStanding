@@ -286,6 +286,7 @@ MonoBehaviour:
   ObservedComponents:
   - {fileID: 5736685192443455864}
   - {fileID: 1714178686714661654}
+  - {fileID: 5557428989494157157}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
@@ -307,7 +308,7 @@ MonoBehaviour:
     TeleportIfDistanceGreaterThan: 3
     InterpolateOption: 4
     InterpolateMoveTowardsSpeed: 1
-    InterpolateLerpSpeed: 10
+    InterpolateLerpSpeed: 20
     ExtrapolateOption: 0
     ExtrapolateSpeed: 1
     ExtrapolateIncludingRoundTripTime: 1
@@ -315,7 +316,7 @@ MonoBehaviour:
   m_RotationModel:
     SynchronizeEnabled: 1
     InterpolateOption: 1
-    InterpolateRotateTowardsSpeed: 180
+    InterpolateRotateTowardsSpeed: 500
     InterpolateLerpSpeed: 5
   m_ScaleModel:
     SynchronizeEnabled: 0
@@ -350,7 +351,7 @@ MonoBehaviour:
     SynchronizeType: 1
     Name: IsRun
   - Type: 4
-    SynchronizeType: 0
+    SynchronizeType: 2
     Name: IsAttack
   m_SynchronizeLayers:
   - SynchronizeType: 0
@@ -403,7 +404,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 10
+  m_Constraints: 122
   m_CollisionDetection: 0
 --- !u!95 &3287315615711940743
 Animator:
@@ -452,7 +453,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 2.5
   runSpeed: 5
-  turnSpeed: 25
+  turnSpeed: 5
 --- !u!114 &7864798968686427384
 MonoBehaviour:
   m_ObjectHideFlags: 0

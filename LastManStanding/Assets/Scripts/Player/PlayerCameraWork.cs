@@ -30,7 +30,11 @@ public class PlayerCameraWork : MonoBehaviourPun
     void Start()
     {
         mainCamera = Camera.main.gameObject;
-        if(mainCamera == null)
+        if(mainCamera != null)
+        {
+            mainCamera.transform.parent = gameObject.transform;
+        }
+        else
         {
             Debug.Log("메인 카메라가 발견되지 않았습니다.");
         }
@@ -52,7 +56,7 @@ public class PlayerCameraWork : MonoBehaviourPun
         //따라다니는 대상이 존재할 경우 따라다님
         if(targetObject != null)
         {
-            transform.position = targetObject.transform.position;
+            transform.position = new Vector3(targetObject.transform.position.x, targetObject.transform.position.y + 1.5f, targetObject.transform.position.z);
         }
         CameraRaycast();
     }

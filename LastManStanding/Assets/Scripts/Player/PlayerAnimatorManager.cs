@@ -16,7 +16,7 @@ public class PlayerAnimatorManager : MonoBehaviourPun
     [SerializeField]
     float runSpeed = 5f;
     [SerializeField]
-    float turnSpeed = 25;
+    float turnSpeed = 5;
 
     Vector2 input;
 
@@ -33,12 +33,7 @@ public class PlayerAnimatorManager : MonoBehaviourPun
     void Update()
     {
         //인스턴스가 클라이언트한테 잘 제어되고 있는지 확인
-        if (photonView.IsMine == false && PhotonNetwork.IsConnected == true)
-        {
-            return;
-        }
-
-        if (!animator)
+        if (photonView.IsMine == false && PhotonNetwork.IsConnected == true || !animator)
         {
             return;
         }
@@ -64,12 +59,7 @@ public class PlayerAnimatorManager : MonoBehaviourPun
     //플레이어의 움직임은 FixedUpdate에서 진행
     private void FixedUpdate()
     {
-        if (photonView.IsMine == false && PhotonNetwork.IsConnected == true)
-        {
-            return;
-        }
-
-        if (!animator)
+        if (photonView.IsMine == false && PhotonNetwork.IsConnected == true || !animator)
         {
             return;
         }
@@ -116,7 +106,9 @@ public class PlayerAnimatorManager : MonoBehaviourPun
     {
         transform.position += transform.forward * Time.deltaTime * runSpeed;
     }
+
     #region InputSystem Callback
+
     public void OnMove(InputAction.CallbackContext context)
     {
         input = context.ReadValue<Vector2>();
@@ -135,6 +127,7 @@ public class PlayerAnimatorManager : MonoBehaviourPun
             animator.SetBool("IsRun", false);
         }
     }
+
     #endregion
 
     public void OnAttack(InputAction.CallbackContext context)

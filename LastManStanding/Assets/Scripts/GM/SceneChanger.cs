@@ -6,6 +6,7 @@
 * Last Update : 2024 / 06 / 19
 */
 
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -51,7 +52,10 @@ public class SceneChanger : MonoBehaviour
     //인게임화면으로 씬 전환 함수
     public void MoveToWaitingRoomScene()
     {
-        SceneManager.LoadScene("WaitingRoom", LoadSceneMode.Single);
+        if(PhotonNetwork.CurrentRoom.PlayerCount == 1)
+        {
+            PhotonNetwork.LoadLevel("WaitingRoom 1");
+        }
     }
     //인게임화면으로 씬 전환 함수
     public void MoveToInGameScene()

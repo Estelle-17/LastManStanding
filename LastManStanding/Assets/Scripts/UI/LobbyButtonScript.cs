@@ -26,15 +26,11 @@ public class LobbyButtonScript : MonoBehaviour
     }
     public void MoveToHostScene()
     {
-        //GameManagerScript.Instance.SaveValue(0, HostRoomName.text, HostToggleValue.isOn);
         networkObject.GetComponent<TestNetwork>().HostConnect(HostRoomName.text, HostToggleValue.isOn);
-        //SceneChanger.Instance.MoveToWaitingRoomScene();
     }
     public void MoveToWaitingRoomScene()
     {
-        //GameManagerScript.Instance.SaveValue(1, JoinRoomName.text, HostToggleValue.isOn);
         networkObject.GetComponent<TestNetwork>().JoinConnect(JoinRoomName.text);
-        //SceneChanger.Instance.MoveToWaitingRoomScene();
     }
     public void OnSettingsUI()
     {
