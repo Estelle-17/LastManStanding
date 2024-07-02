@@ -451,9 +451,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f28e0f88d0a8ae64eaababaf9416f010, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  inputControl: {fileID: 0}
   moveSpeed: 2.5
   runSpeed: 5
   turnSpeed: 5
+  isMoveEnable: 0
 --- !u!114 &7864798968686427384
 MonoBehaviour:
   m_ObjectHideFlags: 0

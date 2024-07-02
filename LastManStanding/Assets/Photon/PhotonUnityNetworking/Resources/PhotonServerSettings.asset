@@ -40,6 +40,10 @@ MonoBehaviour:
   - Fire
   - RespawnSpaceship
   - NoticeRPC
+  - OnGameRoom
+  - DeactivateInputFieldRPC
+  - MoveDisableRPC
+  - MoveEnableRPC
   DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 1

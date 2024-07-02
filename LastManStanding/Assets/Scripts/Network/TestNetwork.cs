@@ -27,13 +27,11 @@ public class TestNetwork : MonoBehaviourPunCallbacks
 
     void Start()
     {
+        // 연결 프로세스를 버전에 맞춰 시작.
         PhotonNetwork.GameVersion = gameVersion;
         PhotonNetwork.ConnectUsingSettings();
     }
 
-    /// 연결 프로세스를 시작.
-    /// 이미 연결이 되어있다면, 무작위 룸으로
-    /// 연결이 되지 않았다면 다시 연결
     public void HostConnect(string roomName, bool isVisible)
     {
         if (PhotonNetwork.IsConnected)
@@ -42,6 +40,7 @@ public class TestNetwork : MonoBehaviourPunCallbacks
             RoomOptions roomOptions = new RoomOptions();
             roomOptions.IsVisible = isVisible;
             roomOptions.MaxPlayers = maxPlayersPerRoom;
+            roomOptions.PublishUserId = true;
             PhotonNetwork.JoinOrCreateRoom(roomName, roomOptions, TypedLobby.Default);
         }
     }
@@ -60,6 +59,7 @@ public class TestNetwork : MonoBehaviourPunCallbacks
                 RoomOptions roomOptions = new RoomOptions();
                 roomOptions.IsVisible = false;
                 roomOptions.MaxPlayers = maxPlayersPerRoom;
+                roomOptions.PublishUserId = true;
                 PhotonNetwork.JoinOrCreateRoom(roomName, roomOptions, TypedLobby.Default);
             }
 
@@ -69,14 +69,6 @@ public class TestNetwork : MonoBehaviourPunCallbacks
     public override void OnConnectedToMaster()
     {
         Debug.Log("Client connected to Master");
-    }
-    //방에 입장하면 호출
-    public override void OnJoinedRoom()
-    {
-        Debug.Log("Enter Room");
-        Debug.LogFormat("플레이어의 닉네임은 {0} 입니다.", PhotonNetwork.NickName);
-        Debug.LogFormat("현재 방에 있는 플레이어는 총 {0}명 입니다.", PhotonNetwork.CurrentRoom.PlayerCount);
-        SceneChanger.Instance.MoveToWaitingRoomScene();
     }
     //방 입장에 실패하면 호출
     public override void OnJoinRoomFailed(short returnCode, string message)

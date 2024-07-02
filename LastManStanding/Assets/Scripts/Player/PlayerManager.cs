@@ -11,9 +11,9 @@ public class PlayerManager : MonoBehaviourPunCallbacks, IPunObservable
     {
         if(photonView.IsMine)
         {
-            PlayerManager.LocalPlayerInstance = this.gameObject;
+            PlayerManager.LocalPlayerInstance = gameObject;
         }
-        DontDestroyOnLoad(this.gameObject);
+        DontDestroyOnLoad(gameObject);
     }
 
     #region IPunObservable Implementation
@@ -22,7 +22,7 @@ public class PlayerManager : MonoBehaviourPunCallbacks, IPunObservable
     {
         if(stream.IsWriting)
         {
-            //값 동기화시 여기에 코드 입력
+            //체력, 공격 같은 값 동기화시 여기에 코드 입력
         }
         else
         {

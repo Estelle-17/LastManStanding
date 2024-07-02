@@ -9,6 +9,8 @@ public class PlayerAnimatorManager : MonoBehaviourPun
 {
     #region MonoBehaviour Callbacks
 
+    public InputController inputControl;
+
     private Animator animator;
 
     [SerializeField]
@@ -19,6 +21,7 @@ public class PlayerAnimatorManager : MonoBehaviourPun
     float turnSpeed = 5;
 
     Vector2 input;
+    public bool isMoveEnable;
 
     void Start()
     {
@@ -27,7 +30,14 @@ public class PlayerAnimatorManager : MonoBehaviourPun
         {
             Debug.LogError("플레이어에 Animator가 존재하지 않습니다.");
         }
+        inputControl = GetComponent<InputController>();
+        if (inputControl != null)
+        {
+            inputControl.playerInputControl.PlayerAction.Chat.started += DisablePlayerInput;
+        }
         input = Vector2.zero;
+
+        isMoveEnable = true;
     }
 
     void Update()
@@ -41,7 +51,12 @@ public class PlayerAnimatorManager : MonoBehaviourPun
         //현재 적용중인 애니메이터
         AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
 
-        if(input.magnitude != 0)
+        if(!isMoveEnable)
+        {
+            input = Vector2.zero;
+        }
+
+        if (input.magnitude != 0)
         {
             animator.SetBool("IsMove", true);
         }
@@ -72,7 +87,11 @@ public class PlayerAnimatorManager : MonoBehaviourPun
         {
             AttackMove();
         }
-
+        //만약 캐릭터가 움직일 수 없을 때
+        if(!isMoveEnable)
+        {
+            return;
+        }
         //공격중에는 이동 불가능
         if (!stateInfo.IsName("Base Layer.Attack") && !animator.GetBool("IsAttack"))
         {
@@ -135,7 +154,19 @@ public class PlayerAnimatorManager : MonoBehaviourPun
         //키 입력이 시작된 경우
         if (context.started)
         {
-            animator.SetBool("IsAttack", true);
+            if(isMoveEnable)
+                animator.SetBool("IsAttack", true);
+
+            isMoveEnable = true;
+        }
+    }
+    //InputSystem의 Chat키를 입력 시 플레이어의 움직임을 멈춤
+    public void DisablePlayerInput(InputAction.CallbackContext context)
+    {
+        if (context.started)
+        {
+            Debug.Log("플레이어 비활성화됨");
+            isMoveEnable = false;
         }
     }
 }
