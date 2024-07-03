@@ -15,6 +15,7 @@ public class TestNetwork : MonoBehaviourPunCallbacks
     private string playerName;
 
     public TMP_InputField userIdText;
+    public TextMeshProUGUI errorText;
 
     private void Awake()
     {
@@ -84,6 +85,12 @@ public class TestNetwork : MonoBehaviourPunCallbacks
     //닉네임 설정 완료 버튼
     public void FinishPlayerNameCheck()
     {
+        if(userIdText.text.Length > 12)
+        {
+            errorText.text = string.Format("<color=#ff0000>12글자 이하로 설정해주세요</color>");
+            return;
+        }
+
         if(string.IsNullOrEmpty(userIdText.text))
         {
             playerName = $"USER_{Random.Range(0, 100):00}";

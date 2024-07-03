@@ -33,7 +33,7 @@ public class PlayerAnimatorManager : MonoBehaviourPun
         inputControl = GetComponent<InputController>();
         if (inputControl != null)
         {
-            inputControl.playerInputControl.PlayerAction.Chat.started += DisablePlayerInput;
+            inputControl.playerInputControl.PlayerAction.Chat.started += SettingPlayerInput;
         }
         input = Vector2.zero;
 
@@ -83,10 +83,10 @@ public class PlayerAnimatorManager : MonoBehaviourPun
         AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
 
         //공격 시 잠깐 앞으로 이동
-        if (animator.GetBool("IsAttack"))
+        /*if (animator.GetBool("IsAttack"))
         {
             AttackMove();
-        }
+        }*/
         //만약 캐릭터가 움직일 수 없을 때
         if(!isMoveEnable)
         {
@@ -161,12 +161,14 @@ public class PlayerAnimatorManager : MonoBehaviourPun
         }
     }
     //InputSystem의 Chat키를 입력 시 플레이어의 움직임을 멈춤
-    public void DisablePlayerInput(InputAction.CallbackContext context)
+    public void SettingPlayerInput(InputAction.CallbackContext context)
     {
         if (context.started)
         {
-            Debug.Log("플레이어 비활성화됨");
-            isMoveEnable = false;
+            if (isMoveEnable)
+                isMoveEnable = false;
+            else
+                isMoveEnable = true;
         }
     }
 }

@@ -241,6 +241,7 @@ GameObject:
   - component: {fileID: 5557428989494157157}
   - component: {fileID: 2158507016802698877}
   - component: {fileID: 7864798968686427384}
+  - component: {fileID: 1824907359280561140}
   m_Layer: 0
   m_Name: Test Player
   m_TagString: Untagged
@@ -533,11 +534,27 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: e7976ec7-872b-4362-8a20-658f6c154ae7
     m_ActionName: PlayerAction/Attack[/Mouse/leftButton]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 0192c6e8-4caa-40aa-b4a2-5f934a2da3cc
+    m_ActionName: PlayerAction/Chat[/Keyboard/enter]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: PC
   m_DefaultActionMap: PlayerAction
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
+--- !u!114 &1824907359280561140
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3234310369798236879}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6fc1bf75c29018548bc0cf62518682ed, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &3505103315344665210
 GameObject:
   m_ObjectHideFlags: 0

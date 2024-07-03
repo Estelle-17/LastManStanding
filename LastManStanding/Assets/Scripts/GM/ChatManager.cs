@@ -12,7 +12,6 @@ public class ChatManager : MonoBehaviourPunCallbacks
 {
     public InputController inputControl;
     public TextMeshProUGUI chatLog;
-    public TextMeshProUGUI playerList;
     public TMP_InputField inputField;
     string players;
     ScrollRect scrollRect = null;   //채팅이 많이 쌓일 경우 스크롤바의 위치를 아래로 고정하기 위한 변수

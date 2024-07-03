@@ -26,7 +26,7 @@ public class LobbyButtonScript : MonoBehaviour
     }
     public void MoveToHostScene()
     {
-        networkObject.GetComponent<TestNetwork>().HostConnect(HostRoomName.text, HostToggleValue.isOn);
+        networkObject.GetComponent<TestNetwork>().HostConnect(HostRoomName.text, HostToggleValue.isOn ? false : true);
     }
     public void MoveToWaitingRoomScene()
     {

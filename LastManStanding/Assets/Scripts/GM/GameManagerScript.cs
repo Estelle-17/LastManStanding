@@ -83,7 +83,7 @@ public class GameManagerScript : MonoBehaviourPunCallbacks
         if (PhotonNetwork.IsMasterClient)
         {
             Debug.LogFormat("OnPlayerEnteredRoom IsMasterClient {0}", PhotonNetwork.IsMasterClient);
-            LoadArena();
+            //LoadArena();
         }
     }
     public override void OnPlayerLeftRoom(Player otherPlayer)
@@ -93,7 +93,7 @@ public class GameManagerScript : MonoBehaviourPunCallbacks
 
         if (PhotonNetwork.IsMasterClient)
         {
-            LoadArena();
+            //LoadArena();
         }
     }
     public override void OnLeftRoom()
