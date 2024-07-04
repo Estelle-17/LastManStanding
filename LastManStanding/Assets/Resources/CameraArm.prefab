@@ -157,7 +157,7 @@ MonoBehaviour:
   horizontalLookSensitivity: 3
   layerMask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 8
   mainCamera: {fileID: 0}
   targetObject: {fileID: 0}
   inputControl: {fileID: 0}

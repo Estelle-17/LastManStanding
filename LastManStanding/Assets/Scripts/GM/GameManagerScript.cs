@@ -11,6 +11,8 @@ public class GameManagerScript : MonoBehaviourPunCallbacks
     public GameObject playerPrefab;
     public GameObject cameraArmPrefab;
 
+    public GameObject[] playersInRoom;
+
     public Text notionText;
 
     private void Start()
@@ -30,6 +32,7 @@ public class GameManagerScript : MonoBehaviourPunCallbacks
 
                 GameObject player = PhotonNetwork.Instantiate(this.playerPrefab.name, new Vector3(0f, 5f, 0f), Quaternion.identity, 0);
                 cameraArm.GetComponent<PlayerCameraWork>().targetObject = player;
+
             }
             else
             {
@@ -37,7 +40,7 @@ public class GameManagerScript : MonoBehaviourPunCallbacks
             }
         }
     }
-    //새로운 플레이어 입장 시 동기화
+    //마스터 클라이언트의 맵 동기화
     void LoadArena()
     {
         if(!PhotonNetwork.IsMasterClient)
@@ -62,7 +65,7 @@ public class GameManagerScript : MonoBehaviourPunCallbacks
         if (PhotonNetwork.CurrentRoom.PlayerCount > 1 && PlayerManager.LocalPlayerInstance == null)
         {
             //카메라 암과 플레이어 생성
-            Debug.Log("start에서 로컬플레이어를 생성합니다.");
+            Debug.Log("joinedRoom에서 로컬플레이어를 생성합니다.");
             GameObject cameraArm = Instantiate(cameraArmPrefab, new Vector3(0f, 0f, 0f), Quaternion.identity);
             DontDestroyOnLoad(cameraArm);
 
@@ -79,22 +82,11 @@ public class GameManagerScript : MonoBehaviourPunCallbacks
     {
         Debug.LogFormat("{0}님이 참가하셨습니다.", newPlayer.NickName);
         Debug.LogFormat("현재 방에 있는 플레이어는 총 {0}명 입니다.", PhotonNetwork.CurrentRoom.PlayerCount);
-
-        if (PhotonNetwork.IsMasterClient)
-        {
-            Debug.LogFormat("OnPlayerEnteredRoom IsMasterClient {0}", PhotonNetwork.IsMasterClient);
-            //LoadArena();
-        }
     }
     public override void OnPlayerLeftRoom(Player otherPlayer)
     {
         Debug.LogFormat("{0}님이 퇴장하셨습니다.", otherPlayer.NickName);
         Debug.LogFormat("현재 방에 있는 플레이어는 총 {0}명 입니다.", PhotonNetwork.CurrentRoom.PlayerCount);
-
-        if (PhotonNetwork.IsMasterClient)
-        {
-            //LoadArena();
-        }
     }
     public override void OnLeftRoom()
     {
