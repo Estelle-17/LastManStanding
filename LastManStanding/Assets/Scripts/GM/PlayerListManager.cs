@@ -8,8 +8,8 @@ using UnityEngine.UI;
 
 public class PlayerListManager : MonoBehaviourPunCallbacks
 {
+    public GameManagerScript gameManagerScript;
     public TextMeshProUGUI playerList;
-
     public GameObject greenGameUI;
 
     string players;
@@ -47,7 +47,9 @@ public class PlayerListManager : MonoBehaviourPunCallbacks
             if (p.ActorNumber == actorNumber)
             {
                 if (isReady)
+                {
                     greenGameUI.transform.GetChild(cnt).GetComponent<Image>().color = Color.green;
+                }
                 else
                     greenGameUI.transform.GetChild(cnt).GetComponent<Image>().color = Color.red;
                 return;

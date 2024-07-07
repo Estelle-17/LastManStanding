@@ -3,6 +3,7 @@ using Photon.Pun;
 using Photon.Realtime;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,9 +12,9 @@ public class GameManagerScript : MonoBehaviourPunCallbacks
     public GameObject playerPrefab;
     public GameObject cameraArmPrefab;
 
-    public GameObject[] playersInRoom;
+    public TextMeshProUGUI ReadyPlayersText;
 
-    public Text notionText;
+    public int readyPlayersCount = 0;
 
     private void Start()
     {
@@ -40,6 +41,12 @@ public class GameManagerScript : MonoBehaviourPunCallbacks
             }
         }
     }
+
+    private void Update()
+    {
+        CheckReadyState();
+    }
+
     //마스터 클라이언트의 맵 동기화
     void LoadArena()
     {
@@ -50,6 +57,15 @@ public class GameManagerScript : MonoBehaviourPunCallbacks
         }
         Debug.LogFormat("WaitingRoom 1을 로딩합니다.");
         PhotonNetwork.LoadLevel("WaitingRoom 1");
+    }
+
+    //현재 플레이어들의 준비 상태 확인
+    void CheckReadyState()
+    {
+        if (ReadyPlayersText != null)
+        {
+            ReadyPlayersText.text = readyPlayersCount + "/" + PhotonNetwork.CurrentRoom.PlayerCount;
+        }
     }
 
     //방에 입장하면 호출

@@ -43,7 +43,7 @@ public class PlayerManager : MonoBehaviourPunCallbacks, IPunObservable
     {
         if(stream.IsWriting)
         {
-            //체력, 공격 같은 값 동기화시 여기에 코드 입력
+            //클라이언트끼리 원하는 값 동기화시 여기에 코드 입력
             stream.SendNext(isRoomReady);
         }
         else
