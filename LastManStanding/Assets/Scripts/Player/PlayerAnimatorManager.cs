@@ -23,6 +23,8 @@ public class PlayerAnimatorManager : MonoBehaviourPun
     Vector2 input;
     public bool isMoveEnable;
 
+    Rigidbody rigidbody;
+
     void Start()
     {
         animator = GetComponent<Animator>();
@@ -38,6 +40,8 @@ public class PlayerAnimatorManager : MonoBehaviourPun
         input = Vector2.zero;
 
         isMoveEnable = true;
+
+        rigidbody = GetComponent<Rigidbody>();
     }
 
     void Update()
@@ -115,10 +119,14 @@ public class PlayerAnimatorManager : MonoBehaviourPun
 
             transform.rotation = Quaternion.Lerp(transform.rotation, viewRot, turnSpeed * Time.deltaTime);
 
-            if(animator.GetBool("IsRun"))
+            if (animator.GetBool("IsRun"))
+                rigidbody.position += moveDir * Time.deltaTime * runSpeed;
+            else
+                rigidbody.position += moveDir * Time.deltaTime * moveSpeed;
+            /*if (animator.GetBool("IsRun"))
                 transform.position += moveDir * Time.deltaTime * runSpeed;
             else
-                transform.position += moveDir * Time.deltaTime * moveSpeed;
+                transform.position += moveDir * Time.deltaTime * moveSpeed;*/
         }
     }
     private void AttackMove()

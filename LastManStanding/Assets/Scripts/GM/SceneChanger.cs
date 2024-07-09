@@ -60,6 +60,6 @@ public class SceneChanger : MonoBehaviour
     //인게임화면으로 씬 전환 함수
     public void MoveToInGameScene()
     {
-        SceneManager.LoadScene("InGame", LoadSceneMode.Single);
+        PhotonNetwork.LoadLevel("InGame");
     }
 }

@@ -30,6 +30,12 @@ public class ReadyTrigger : MonoBehaviourPunCallbacks
             startCount = 0;
         }
         loadingBar.fillAmount = startCount / 3;
+
+        if(startCount / 3 >= 1)
+        {
+            LoadArena();
+            startCount = 0;
+        }
     }
 
     //READY ZONE의 플레이어들을 체크
@@ -48,10 +54,13 @@ public class ReadyTrigger : MonoBehaviourPunCallbacks
         gameManagerScript.readyPlayersCount = cnt;
     }
 
-    void OnDrawGizmos()
+    //게임 시작 시 모든 클라이언트 씬 변경
+    void LoadArena()
     {
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireCube(transform.position, transform.localScale);
+        if (PhotonNetwork.IsMasterClient)
+        {
+            SceneChanger.Instance.MoveToInGameScene();
+        }
     }
 
     //플레이어가 입장/퇴장 시 bool값 변경
@@ -63,7 +72,6 @@ public class ReadyTrigger : MonoBehaviourPunCallbacks
             CheckPlayers();
         }
     }
-
     private void OnTriggerExit(Collider other)
     {
         if (other.gameObject.tag == "Player")

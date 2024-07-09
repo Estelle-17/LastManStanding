@@ -34,7 +34,11 @@ public class PlayerManager : MonoBehaviourPunCallbacks, IPunObservable
 
     void Update()
     {
-        playerListManager.SetReadyImage(isRoomReady, playerActorNumber);
+        if(playerListManager != null)
+        {
+            playerListManager.SetReadyImage(isRoomReady, playerActorNumber);
+        }
+
     }
 
     #region IPunObservable Implementation
