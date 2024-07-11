@@ -4,14 +4,14 @@ using UnityEngine;
 
 public class GoalZoneManager : MonoBehaviour
 {
+    [SerializeField]
+    int goalNumber = 0;
 
-    void Start()
+    private void OnTriggerEnter(Collider other)
     {
-        
-    }
-
-    void Update()
-    {
-        
+        if (other.gameObject.tag == "Player")
+        {
+            other.gameObject.GetComponent<PlayerManager>().goalCheckList[goalNumber] = 1;
+        }
     }
 }

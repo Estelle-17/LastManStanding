@@ -7,8 +7,6 @@ using UnityEngine.Windows;
 
 public class PlayerAnimatorManager : MonoBehaviourPun
 {
-    #region MonoBehaviour Callbacks
-
     public InputController inputControl;
 
     private Animator animator;
@@ -23,7 +21,7 @@ public class PlayerAnimatorManager : MonoBehaviourPun
     Vector2 input;
     public bool isMoveEnable;
 
-    Rigidbody rigidbody;
+    Rigidbody rig;
 
     void Start()
     {
@@ -41,7 +39,7 @@ public class PlayerAnimatorManager : MonoBehaviourPun
 
         isMoveEnable = true;
 
-        rigidbody = GetComponent<Rigidbody>();
+        rig = GetComponent<Rigidbody>();
     }
 
     void Update()
@@ -103,8 +101,6 @@ public class PlayerAnimatorManager : MonoBehaviourPun
         }
     }
 
-    #endregion
-
     private void MoveAndRotate()
     {
         if (input != null && input.magnitude != 0)
@@ -120,9 +116,9 @@ public class PlayerAnimatorManager : MonoBehaviourPun
             transform.rotation = Quaternion.Lerp(transform.rotation, viewRot, turnSpeed * Time.deltaTime);
 
             if (animator.GetBool("IsRun"))
-                rigidbody.position += moveDir * Time.deltaTime * runSpeed;
+                rig.position += moveDir * Time.deltaTime * runSpeed;
             else
-                rigidbody.position += moveDir * Time.deltaTime * moveSpeed;
+                rig.position += moveDir * Time.deltaTime * moveSpeed;
             /*if (animator.GetBool("IsRun"))
                 transform.position += moveDir * Time.deltaTime * runSpeed;
             else

@@ -441,8 +441,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerListManager: {fileID: 0}
+  inGameplayerListManager: {fileID: 0}
   playerActorNumber: 0
   isRoomReady: 0
+  goalCheckList: 
 --- !u!114 &2158507016802698877
 MonoBehaviour:
   m_ObjectHideFlags: 0
