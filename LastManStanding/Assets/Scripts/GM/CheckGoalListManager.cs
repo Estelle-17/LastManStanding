@@ -17,9 +17,14 @@ public class CheckGoalListManager : MonoBehaviourPunCallbacks
     [SerializeField]
     TextMeshProUGUI buttonName;
 
+    public GameObject eventSystem;
+    public GameObject uiEventSystem;
+
+    GameObject[] players;
+
     void Start()
     {
-        GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
+        players = GameObject.FindGameObjectsWithTag("Player");
         playerList = new PlayerManager[players.Length];
 
         for (int i = 0; i < players.Length; i++)
@@ -30,6 +35,17 @@ public class CheckGoalListManager : MonoBehaviourPunCallbacks
 
     void Update()
     {
+        if(players.Length == 0)
+        {
+            players = GameObject.FindGameObjectsWithTag("Player");
+            playerList = new PlayerManager[players.Length];
+
+            for (int i = 0; i < players.Length; i++)
+            {
+                playerList[i] = players[i].GetComponent<PlayerManager>();
+            }
+        }
+
         if (playerList != null) 
         {
             SetGoalCheckList();
@@ -46,7 +62,7 @@ public class CheckGoalListManager : MonoBehaviourPunCallbacks
 
             int goalCnt = 0;
 
-            for (int i = 0; i < 4; i++)
+            for (int i = 0; i < checklist.Length; i++)
             {
                 if (checklist[i] == 1)
                     goalCnt++;
@@ -56,10 +72,8 @@ public class CheckGoalListManager : MonoBehaviourPunCallbacks
             {
                 foreach (Player p in PhotonNetwork.PlayerList)
                 {
-                    if (p.ActorNumber == actorNumber)
-                    {
-                        SetGameEndUI(p.NickName);
-                    }
+                    //Debug.Log(p.NickName + "is Goal!");
+                    SetGameEndUI(p.NickName);
                 }
             }
 
@@ -70,6 +84,8 @@ public class CheckGoalListManager : MonoBehaviourPunCallbacks
     //게임이 끝났을 때 보여질 UI설정
     void SetGameEndUI(string name)
     {
+        //플레이어 입력 해제
+        eventSystem.SetActive(false);
         playerName.text = name;
         if(PhotonNetwork.IsMasterClient)
         {
@@ -80,7 +96,14 @@ public class CheckGoalListManager : MonoBehaviourPunCallbacks
             buttonName.text = "Waiting to Host";
         }
 
+        foreach (PlayerManager pm in playerList)
+        {
+            pm.gameObject.GetComponent<PlayerAnimatorManager>().isMoveEnable = false;
+        }
+
         gameEndUI.SetActive(true);
+        //UI입력을 위한 EventSystem을 SetActive시켜줌
+        uiEventSystem.SetActive(true);
     }
 
     //게임이 끝난 후 대기실로 이동
@@ -89,11 +112,14 @@ public class CheckGoalListManager : MonoBehaviourPunCallbacks
         //호스트만 사용 가능
         if (PhotonNetwork.IsMasterClient)
         {
-            PhotonNetwork.LoadLevel("WaitingRoom 1");
-            foreach (PlayerManager pm in playerList)
+            //모든 AI플레이어 제거
+            GameObject[] aiPlayers = GameObject.FindGameObjectsWithTag("AIPlayer");
+            foreach (GameObject aiPlayer in aiPlayers)
             {
-                pm.gameObject.transform.position = new Vector3(0f, 5f, 0f);
+                Destroy(aiPlayer);
             }
+
+            PhotonNetwork.LoadLevel("WaitingRoom 1");
         }
     }
 }

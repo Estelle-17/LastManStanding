@@ -27,9 +27,14 @@ public class PlayerManager : MonoBehaviourPunCallbacks, IPunObservable
         {
             PlayerManager.LocalPlayerInstance = gameObject;
         }
-        DontDestroyOnLoad(gameObject);
 
-        playerListManager = GameObject.FindWithTag("PlayerListUI").GetComponent<PlayerListManager>();
+        GameObject obj = GameObject.FindWithTag("PlayerListUI");
+        if(obj != null)
+        {
+            playerListManager = obj.GetComponent<PlayerListManager>();
+            inGameplayerListManager = obj.GetComponent<InGamePlayerListManager>();
+        }
+
         //플레이어의 고유 ActorNumber 저장
         playerActorNumber = GetComponent<PhotonView>().ControllerActorNr;
 
@@ -57,10 +62,14 @@ public class PlayerManager : MonoBehaviourPunCallbacks, IPunObservable
     }
 
     //InGameScene입장 시 각 플레이어들의 정보를 UI로 표현해주는 GameObject검색
-    public void SetInGamePlayerListManager()
+    /*public void SetInGamePlayerListManager()
     {
         inGameplayerListManager = GameObject.FindWithTag("PlayerListUI").GetComponent<InGamePlayerListManager>();
     }
+    public void SetPlayerListManager()
+    {
+        playerListManager = GameObject.FindWithTag("PlayerListUI").GetComponent<PlayerListManager>();
+    }*/
 
     #region IPunObservable Implementation
 

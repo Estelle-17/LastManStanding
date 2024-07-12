@@ -29,7 +29,6 @@ public class GameManagerScript : MonoBehaviourPunCallbacks
                 //카메라 암과 플레이어 생성
                 Debug.Log("start에서 로컬플레이어를 생성합니다.");
                 GameObject cameraArm = Instantiate(cameraArmPrefab, new Vector3(0f, 0f, 0f), Quaternion.identity);
-                DontDestroyOnLoad(cameraArm);
 
                 GameObject player = PhotonNetwork.Instantiate(this.playerPrefab.name, new Vector3(0f, 5f, 0f), Quaternion.identity, 0);
                 cameraArm.GetComponent<PlayerCameraWork>().targetObject = player;
@@ -83,7 +82,6 @@ public class GameManagerScript : MonoBehaviourPunCallbacks
             //카메라 암과 플레이어 생성
             Debug.Log("joinedRoom에서 로컬플레이어를 생성합니다.");
             GameObject cameraArm = Instantiate(cameraArmPrefab, new Vector3(0f, 0f, 0f), Quaternion.identity);
-            DontDestroyOnLoad(cameraArm);
 
             GameObject player = PhotonNetwork.Instantiate(this.playerPrefab.name, new Vector3(0f, 5f, 0f), Quaternion.identity, 0);
             cameraArm.GetComponent<PlayerCameraWork>().targetObject = player;
