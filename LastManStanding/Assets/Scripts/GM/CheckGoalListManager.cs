@@ -35,7 +35,7 @@ public class CheckGoalListManager : MonoBehaviourPunCallbacks
 
     void Update()
     {
-        if(players.Length == 0)
+        if(players.Length != PhotonNetwork.PlayerList.Length)
         {
             players = GameObject.FindGameObjectsWithTag("Player");
             playerList = new PlayerManager[players.Length];
@@ -46,14 +46,54 @@ public class CheckGoalListManager : MonoBehaviourPunCallbacks
             }
         }
 
-        if (playerList != null) 
+        if (playerList != null && players.Length == PhotonNetwork.PlayerList.Length) 
         {
-            SetGoalCheckList();
+            CheckRemainPlayers();
+            CheckGoalList();
+        }
+    }
+
+    public void CheckRemainPlayers()
+    {
+        int remainCnt = 0;
+        foreach (PlayerManager pm in playerList)
+        {
+            if(!pm.isDead)
+            {
+                remainCnt++;
+            }
+        }
+
+        //만약 플레이어가 한명만 남았다면 모든 클라이언트에 게임 결과창 출력
+        if (remainCnt == 1)
+        {
+            foreach (PlayerManager pm in playerList)
+            {
+                int actorNumber = pm.playerActorNumber;
+                if (pm.isDead)
+                    continue;
+                foreach (Player p in PhotonNetwork.PlayerList)
+                {
+                    if(p.ActorNumber == actorNumber)
+                    {
+                        SetGameEndUI(p.NickName);
+                        return;
+                    }
+                }
+            }
+        }
+        else if (remainCnt == 0)
+        {
+            foreach (Player p in PhotonNetwork.PlayerList)
+            {
+                SetGameEndUI("None");
+                return;
+            }
         }
     }
 
     //플레이어가 모든 골에 접근하였는지 확인
-    public void SetGoalCheckList()
+    public void CheckGoalList()
     {
         foreach (PlayerManager pm in playerList)
         {
@@ -109,6 +149,7 @@ public class CheckGoalListManager : MonoBehaviourPunCallbacks
     //게임이 끝난 후 대기실로 이동
     public void BackToWaitingScene()
     {
+        Debug.Log("IsClicked!");
         //호스트만 사용 가능
         if (PhotonNetwork.IsMasterClient)
         {

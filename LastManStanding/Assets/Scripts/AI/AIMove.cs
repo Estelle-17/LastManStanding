@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class AIMove : MonoBehaviour
+public class AIMove : MonoBehaviour, IPunObservable
 {
     public enum AIState
     {
@@ -22,18 +22,28 @@ public class AIMove : MonoBehaviour
 
     [SerializeField]
     float remainTime = 0;
-    
+    [SerializeField]
+    public bool isDead;
+    private bool isDeadSettingFinish;
+
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
         animator = GetComponent<Animator>();
 
         remainTime = 0;
+        isDead = false;
+        isDeadSettingFinish = false;
     }
 
     void Update()
     {
-        if (PhotonNetwork.IsMasterClient)
+        if (PhotonNetwork.IsMasterClient && isDead && !isDeadSettingFinish)
+        {
+            CharacterDead();
+            isDeadSettingFinish = true;
+        }
+        if (PhotonNetwork.IsMasterClient && !isDead)
         {
             //정해진 시간 동안 주어진 State실행
             remainTime -= Time.deltaTime;
@@ -95,4 +105,29 @@ public class AIMove : MonoBehaviour
 
         return transform.position;
     }
+
+    public void CharacterDead()
+    {
+        agent.SetDestination(transform.position);
+        animator.SetBool("IsDead", true);
+        isDead = true;
+        GetComponent<CapsuleCollider>().enabled = false;
+    }
+
+    #region IPunObservable Implementation
+
+    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+    {
+        if (stream.IsWriting)
+        {
+            //클라이언트끼리 원하는 값 동기화시 여기에 코드 입력
+            stream.SendNext(isDead);
+        }
+        else
+        {
+            this.isDead = (bool)stream.ReceiveNext();
+        }
+    }
+
+    #endregion
 }

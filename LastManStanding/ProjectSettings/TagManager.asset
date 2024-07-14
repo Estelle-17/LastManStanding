@@ -9,6 +9,7 @@ TagManager:
   - GM
   - AIPlayer
   - CameraArm
+  - Toy
   layers:
   - Default
   - TransparentFX

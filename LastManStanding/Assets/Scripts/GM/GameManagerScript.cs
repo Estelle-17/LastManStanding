@@ -4,13 +4,17 @@ using Photon.Realtime;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.AI;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class GameManagerScript : MonoBehaviourPunCallbacks
 {
     public GameObject playerPrefab;
     public GameObject cameraArmPrefab;
+    public Image blackBackground;
 
     public TextMeshProUGUI ReadyPlayersText;
 
@@ -18,7 +22,13 @@ public class GameManagerScript : MonoBehaviourPunCallbacks
 
     private void Start()
     {
-        if(playerPrefab == null)
+        //인게임 시작 전 게임 로딩을 위해 1초정도 FadeOut진행
+        if (SceneManager.GetActiveScene().name == "InGame")
+        {
+            StartCoroutine(FadeOut());
+        }
+
+        if (playerPrefab == null)
         {
             Debug.LogError("playerPrefab이 설정되지 않았습니다.");
         }
@@ -30,7 +40,18 @@ public class GameManagerScript : MonoBehaviourPunCallbacks
                 Debug.Log("start에서 로컬플레이어를 생성합니다.");
                 GameObject cameraArm = Instantiate(cameraArmPrefab, new Vector3(0f, 0f, 0f), Quaternion.identity);
 
-                GameObject player = PhotonNetwork.Instantiate(this.playerPrefab.name, new Vector3(0f, 5f, 0f), Quaternion.identity, 0);
+                GameObject player;
+                //인게임에서는 플레이어를 랜덤한 위치에 생성시켜줌
+                if (SceneManager.GetActiveScene().name == "InGame")
+                {
+                    player = PhotonNetwork.Instantiate(this.playerPrefab.name, SetRandomPlayerPositionOnNavMesh(), Quaternion.identity, 0);
+                    //플레이어는 FadeOut이 끝나기 전까지 움직일 수 없음
+                    player.GetComponent<PlayerAnimatorManager>().isMoveEnable = false;
+                }
+                else
+                {
+                    player = PhotonNetwork.Instantiate(this.playerPrefab.name, new Vector3(0f, 5f, 0f), Quaternion.identity, 0);
+                }
                 cameraArm.GetComponent<PlayerCameraWork>().targetObject = player;
 
             }
@@ -66,6 +87,18 @@ public class GameManagerScript : MonoBehaviourPunCallbacks
             ReadyPlayersText.text = readyPlayersCount + "/" + PhotonNetwork.CurrentRoom.PlayerCount;
         }
     }
+    Vector3 SetRandomPlayerPositionOnNavMesh()
+    {
+        //AI캐릭터로부터 일정 범위의 랜덤한 위치를 생성합니다.
+        Vector3 randomPosition = Random.insideUnitSphere * 100f;
+        randomPosition.y = 1;
+        //랜덤 위치가 NavMesh위에 있는지 확인해줍니다.
+        NavMeshHit hit;
+
+        while (!NavMesh.SamplePosition(randomPosition, out hit, 100f, NavMesh.AllAreas)) { }
+
+        return hit.position;
+    }
 
     //방에 입장하면 호출
     public override void OnJoinedRoom()
@@ -83,7 +116,16 @@ public class GameManagerScript : MonoBehaviourPunCallbacks
             Debug.Log("joinedRoom에서 로컬플레이어를 생성합니다.");
             GameObject cameraArm = Instantiate(cameraArmPrefab, new Vector3(0f, 0f, 0f), Quaternion.identity);
 
-            GameObject player = PhotonNetwork.Instantiate(this.playerPrefab.name, new Vector3(0f, 5f, 0f), Quaternion.identity, 0);
+            GameObject player;
+            //인게임에서는 플레이어를 랜덤한 위치에 생성시켜줌
+            if (SceneManager.GetActiveScene().name == "InGame")
+            {
+                player = PhotonNetwork.Instantiate(this.playerPrefab.name, SetRandomPlayerPositionOnNavMesh(), Quaternion.identity, 0);
+            }
+            else
+            {
+                player = PhotonNetwork.Instantiate(this.playerPrefab.name, new Vector3(0f, 5f, 0f), Quaternion.identity, 0);
+            }
             cameraArm.GetComponent<PlayerCameraWork>().targetObject = player;
         }
         else
@@ -105,5 +147,25 @@ public class GameManagerScript : MonoBehaviourPunCallbacks
     public override void OnLeftRoom()
     {
         SceneChanger.Instance.MoveToLobbyScene();
+    }
+
+    IEnumerator FadeOut()
+    {
+        yield return new WaitForSecondsRealtime(1);
+        Color fadecolor = blackBackground.color;
+
+        while (fadecolor.a > 0f)
+        {
+            fadecolor.a -= Time.deltaTime;
+            blackBackground.color = fadecolor;
+            yield return null;
+        }
+
+        //FadeOut 끝난 후 플레이어 움직임 활성화
+        GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
+        foreach (GameObject p in players)
+        {
+            p.gameObject.GetComponent<PlayerAnimatorManager>().isMoveEnable = true;
+        }
     }
 }

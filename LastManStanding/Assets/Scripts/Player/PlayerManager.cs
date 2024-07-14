@@ -19,7 +19,10 @@ public class PlayerManager : MonoBehaviourPunCallbacks, IPunObservable
     public int playerActorNumber;
 
     public bool isRoomReady;
+    public bool isDead;
     public int[] goalCheckList;
+
+    private Animator animator;
 
     private void Awake()
     {
@@ -35,10 +38,17 @@ public class PlayerManager : MonoBehaviourPunCallbacks, IPunObservable
             inGameplayerListManager = obj.GetComponent<InGamePlayerListManager>();
         }
 
+        animator = GetComponent<Animator>();
+        if (!animator)
+        {
+            Debug.LogError("플레이어에 Animator가 존재하지 않습니다.");
+        }
+
         //플레이어의 고유 ActorNumber 저장
         playerActorNumber = GetComponent<PhotonView>().ControllerActorNr;
 
         isRoomReady = false;
+        isDead = false;
         goalCheckList = new int[4];
         for(int i = 0; i < 4; i++)
         {
@@ -59,6 +69,13 @@ public class PlayerManager : MonoBehaviourPunCallbacks, IPunObservable
         {
             inGameplayerListManager.SetGoalCheckList(goalCheckList, playerActorNumber);
         }
+    }
+
+    public void CharacterDead()
+    {
+        animator.SetBool("IsDead", true);
+        isDead = true;
+        GetComponent<CapsuleCollider>().enabled = false;
     }
 
     //InGameScene입장 시 각 플레이어들의 정보를 UI로 표현해주는 GameObject검색

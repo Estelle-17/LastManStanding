@@ -1,13 +1,16 @@
 using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
+using System.Drawing;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 using UnityEngine.Windows;
 
 public class PlayerAnimatorManager : MonoBehaviourPun
 {
     public InputController inputControl;
+    public Transform attackColliderPosition;
 
     private Animator animator;
 
@@ -20,8 +23,13 @@ public class PlayerAnimatorManager : MonoBehaviourPun
 
     Vector2 input;
     public bool isMoveEnable;
+    public bool isCheckAttackCollider;
+    [SerializeField]
+    public bool isActiveAttack;
 
     Rigidbody rig;
+
+    Vector3 gizmoPos;
 
     void Start()
     {
@@ -35,9 +43,21 @@ public class PlayerAnimatorManager : MonoBehaviourPun
         {
             inputControl.playerInputControl.PlayerAction.Chat.started += SettingPlayerInput;
         }
+
+        //인게임에서만 공격 허용
+        if (SceneManager.GetActiveScene().name == "InGame")
+        {
+            isActiveAttack = true;
+        }
+        else
+        {
+            isActiveAttack = false;
+        }
+
         input = Vector2.zero;
 
         isMoveEnable = true;
+        isCheckAttackCollider = false;
 
         rig = GetComponent<Rigidbody>();
     }
@@ -72,6 +92,17 @@ public class PlayerAnimatorManager : MonoBehaviourPun
         {
             animator.SetBool("IsAttack", false);
         }
+        else
+        {
+            isCheckAttackCollider = false;
+        }
+
+        //공격 시 콜라이터 체크
+        if (stateInfo.IsName("Base Layer.Attack") && stateInfo.normalizedTime >= 0.55f && !isCheckAttackCollider)
+        {
+            isCheckAttackCollider = true;
+            CheckAttackCollider();
+        }
     }
     //플레이어의 움직임은 FixedUpdate에서 진행
     private void FixedUpdate()
@@ -84,11 +115,6 @@ public class PlayerAnimatorManager : MonoBehaviourPun
         //현재 적용중인 애니메이터
         AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
 
-        //공격 시 잠깐 앞으로 이동
-        /*if (animator.GetBool("IsAttack"))
-        {
-            AttackMove();
-        }*/
         //만약 캐릭터가 움직일 수 없을 때
         if(!isMoveEnable)
         {
@@ -125,10 +151,33 @@ public class PlayerAnimatorManager : MonoBehaviourPun
                 transform.position += moveDir * Time.deltaTime * moveSpeed;*/
         }
     }
-    private void AttackMove()
+    //공격 시 맞은 플레이어 및 장난감 체크
+    private void CheckAttackCollider()
     {
-        transform.position += transform.forward * Time.deltaTime * runSpeed;
+        gizmoPos = new Vector3(attackColliderPosition.position.x, attackColliderPosition.position.y, attackColliderPosition.position.z);
+        Collider[] cols = Physics.OverlapSphere(gizmoPos, 1);
+        foreach (Collider col in cols)
+        {
+            if (col.CompareTag("Player") && isActiveAttack && col.gameObject != gameObject && !col.GetComponent<PlayerManager>().isDead)
+            {
+                col.GetComponent<PlayerManager>().CharacterDead();
+            }
+            else if(col.CompareTag("AIPlayer") && isActiveAttack && !col.GetComponent<AIMove>().isDead)
+            {
+                col.GetComponent<AIMove>().CharacterDead();
+            }
+            else if(col.CompareTag("Toy"))
+            {
+                col.GetComponent<Rigidbody>().AddForce(transform.forward / 50, ForceMode.Impulse);
+            }
+        }
     }
+
+    /*void OnDrawGizmos()
+    {
+        Gizmos.color = UnityEngine.Color.red;
+        Gizmos.DrawWireSphere(gizmoPos, 1);
+    }*/
 
     #region InputSystem Callback
 
@@ -136,6 +185,7 @@ public class PlayerAnimatorManager : MonoBehaviourPun
     {
         input = context.ReadValue<Vector2>();
     }
+    //달리기 설정
     public void OnRun(InputAction.CallbackContext context)
     {
         //키 입력이 시작된 경우
@@ -150,9 +200,7 @@ public class PlayerAnimatorManager : MonoBehaviourPun
             animator.SetBool("IsRun", false);
         }
     }
-
-    #endregion
-
+    //공격 설정
     public void OnAttack(InputAction.CallbackContext context)
     {
         //키 입력이 시작된 경우
@@ -175,4 +223,6 @@ public class PlayerAnimatorManager : MonoBehaviourPun
                 isMoveEnable = true;
         }
     }
+
+    #endregion
 }

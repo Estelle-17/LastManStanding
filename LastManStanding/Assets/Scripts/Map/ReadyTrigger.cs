@@ -45,7 +45,6 @@ public class ReadyTrigger : MonoBehaviourPunCallbacks
         int cnt = 0;
         foreach (Collider col in cols)
         {
-            Debug.Log(col.name);
             if(col.CompareTag("Player"))
             {
                 cnt++;
