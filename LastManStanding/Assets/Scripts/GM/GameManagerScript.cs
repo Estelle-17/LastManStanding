@@ -22,6 +22,18 @@ public class GameManagerScript : MonoBehaviourPunCallbacks
 
     private void Start()
     {
+        //씬에 맞게 마우스 커서의 lockState와 visible설정
+        if (SceneManager.GetActiveScene().name == "MainMenu")
+        {
+            Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.None;
+        }
+        else
+        {
+            Cursor.visible = false;
+            Cursor.lockState = CursorLockMode.Locked;
+        }
+
         //인게임 시작 전 게임 로딩을 위해 1초정도 FadeOut진행
         if (SceneManager.GetActiveScene().name == "InGame")
         {
@@ -110,7 +122,7 @@ public class GameManagerScript : MonoBehaviourPunCallbacks
         SceneChanger.Instance.MoveToWaitingRoomScene();
 
         //입장한 플레이어를 생성해줍니다.
-        if (PhotonNetwork.CurrentRoom.PlayerCount > 1 && PlayerManager.LocalPlayerInstance == null)
+        if (PhotonNetwork.InRoom && PhotonNetwork.CurrentRoom.PlayerCount > 1 && PlayerManager.LocalPlayerInstance == null)
         {
             //카메라 암과 플레이어 생성
             Debug.Log("joinedRoom에서 로컬플레이어를 생성합니다.");
@@ -146,7 +158,7 @@ public class GameManagerScript : MonoBehaviourPunCallbacks
     }
     public override void OnLeftRoom()
     {
-        SceneChanger.Instance.MoveToLobbyScene();
+        //SceneChanger.Instance.MoveToLobbyScene();
     }
 
     IEnumerator FadeOut()

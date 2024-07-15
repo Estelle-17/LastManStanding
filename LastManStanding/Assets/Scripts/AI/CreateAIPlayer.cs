@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.SceneManagement;
 
 public class CreateAIPlayer : MonoBehaviourPunCallbacks
 {
@@ -10,8 +11,9 @@ public class CreateAIPlayer : MonoBehaviourPunCallbacks
 
     void Start()
     {
-        if (PhotonNetwork.IsMasterClient)
+        if (PhotonNetwork.IsMasterClient && SceneManager.GetActiveScene().name == "InGame")
         {
+            Debug.Log("AI»ý¼º");
             for (int i = 0; i < 50; i++)
             {
                 if (SpawnAIPlayerOnNavMesh())

@@ -58,6 +58,16 @@ public class ReadyTrigger : MonoBehaviourPunCallbacks
     {
         if (PhotonNetwork.IsMasterClient)
         {
+            GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
+
+            foreach (GameObject p in players)
+            {
+                if (p.GetComponent<PhotonView>().IsMine == true)
+                {
+                    PhotonNetwork.Destroy(gameObject);
+                }
+            }
+
             SceneChanger.Instance.MoveToInGameScene();
         }
     }

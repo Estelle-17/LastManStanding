@@ -22,6 +22,8 @@ public class CheckGoalListManager : MonoBehaviourPunCallbacks
 
     GameObject[] players;
 
+    bool isGameEnd;
+
     void Start()
     {
         players = GameObject.FindGameObjectsWithTag("Player");
@@ -31,6 +33,8 @@ public class CheckGoalListManager : MonoBehaviourPunCallbacks
         {
             playerList[i] = players[i].GetComponent<PlayerManager>();
         }
+
+        isGameEnd = false;
     }
 
     void Update()
@@ -46,7 +50,7 @@ public class CheckGoalListManager : MonoBehaviourPunCallbacks
             }
         }
 
-        if (playerList != null && players.Length == PhotonNetwork.PlayerList.Length) 
+        if (playerList != null && players.Length == PhotonNetwork.PlayerList.Length && !isGameEnd) 
         {
             CheckRemainPlayers();
             CheckGoalList();
@@ -112,7 +116,6 @@ public class CheckGoalListManager : MonoBehaviourPunCallbacks
             {
                 foreach (Player p in PhotonNetwork.PlayerList)
                 {
-                    //Debug.Log(p.NickName + "is Goal!");
                     SetGameEndUI(p.NickName);
                 }
             }
@@ -124,6 +127,12 @@ public class CheckGoalListManager : MonoBehaviourPunCallbacks
     //게임이 끝났을 때 보여질 UI설정
     void SetGameEndUI(string name)
     {
+        isGameEnd = true;
+
+        //마우스 커서를 고졍시키며 보이지 않도록 함
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
+
         //플레이어 입력 해제
         eventSystem.SetActive(false);
         playerName.text = name;
@@ -150,14 +159,23 @@ public class CheckGoalListManager : MonoBehaviourPunCallbacks
     public void BackToWaitingScene()
     {
         Debug.Log("IsClicked!");
+
         //호스트만 사용 가능
         if (PhotonNetwork.IsMasterClient)
         {
-            //모든 AI플레이어 제거
+            //Photon.Instantiate로 생성된 모든 GameObject 제거
             GameObject[] aiPlayers = GameObject.FindGameObjectsWithTag("AIPlayer");
             foreach (GameObject aiPlayer in aiPlayers)
             {
-                Destroy(aiPlayer);
+                PhotonNetwork.Destroy(aiPlayer);
+            }
+
+            foreach (PlayerManager pm in playerList)
+            {
+                if (pm.gameObject.GetComponent<PhotonView>().IsMine == true)
+                {
+                    PhotonNetwork.Destroy(pm.gameObject);
+                }
             }
 
             PhotonNetwork.LoadLevel("WaitingRoom 1");

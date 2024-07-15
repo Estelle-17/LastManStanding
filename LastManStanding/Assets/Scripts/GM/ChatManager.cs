@@ -64,23 +64,14 @@ public class ChatManager : MonoBehaviourPunCallbacks
         inputField.DeactivateInputField();
     }
 
-        public void GameStart()
-    {
-        //°ÔÀÓ ½ÃÀÛ ½Ã ¸¶½ºÅÍ Å¬¶óÀÌ¾ðÆ®°¡ LoadLevel ½ÇÇà
-        if(PhotonNetwork.IsMasterClient)
-        {
-            photonView.RPC("OnGameRoom", RpcTarget.AllBuffered);
-        }
-    }
-
     public override void OnPlayerEnteredRoom(Player newPlayer)
     {
-        string msg = string.Format("<color=#00ff00>[{0}]´ÔÀÌ ÀÔÀåÇÏ¼Ì½À´Ï´Ù.</color>", newPlayer);
+        string msg = string.Format("<color=#00ff00>[{0}]´ÔÀÌ ÀÔÀåÇÏ¼Ì½À´Ï´Ù.</color>", newPlayer.NickName);
         NoticeRPC(msg);
     }
     public override void OnPlayerLeftRoom(Player otherPlayer)
     {
-        string msg = string.Format("<color=#ff0000>[{0}]´ÔÀÌ ÅðÀåÇÏ¼Ì½À´Ï´Ù.</color>", otherPlayer);
+        string msg = string.Format("<color=#ff0000>[{0}]´ÔÀÌ ÅðÀåÇÏ¼Ì½À´Ï´Ù.</color>", otherPlayer.NickName);
         NoticeRPC(msg);
     }
 
@@ -90,11 +81,6 @@ public class ChatManager : MonoBehaviourPunCallbacks
         Debug.Log(msg);
         chatLog.text += "\n" + msg;
         StartCoroutine(ScrollUpdate());
-    }
-    [PunRPC]
-    void OnGameRoom()   //°ÔÀÓ ÀÔÀå ½Ã
-    {
-        PhotonNetwork.LoadLevel("InGame");
     }
 
     IEnumerator ScrollUpdate()

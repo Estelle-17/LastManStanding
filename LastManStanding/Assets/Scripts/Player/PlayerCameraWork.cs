@@ -78,7 +78,7 @@ public class PlayerCameraWork : MonoBehaviourPun
         if (hit.point != Vector3.zero)
         {
             //Raycast가 닿은 위치로 옮긴다
-            hitPosition = hit.point;
+            hitPosition = hit.point - (targetObject.transform.position - transform.position).normalized;
         }
         else
         {

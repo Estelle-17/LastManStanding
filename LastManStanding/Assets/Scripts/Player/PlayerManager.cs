@@ -29,6 +29,9 @@ public class PlayerManager : MonoBehaviourPunCallbacks, IPunObservable
         if(photonView.IsMine)
         {
             PlayerManager.LocalPlayerInstance = gameObject;
+
+            //클라이언트가 조종하는 플레이어가 맵의 충돌체크가 올바르게 되도록 설정
+            gameObject.GetComponent<Rigidbody>().interpolation = RigidbodyInterpolation.Extrapolate;
         }
 
         GameObject obj = GameObject.FindWithTag("PlayerListUI");
@@ -75,6 +78,7 @@ public class PlayerManager : MonoBehaviourPunCallbacks, IPunObservable
     {
         animator.SetBool("IsDead", true);
         isDead = true;
+        GetComponent<Rigidbody>().useGravity = false;
         GetComponent<CapsuleCollider>().enabled = false;
     }
 

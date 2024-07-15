@@ -64,14 +64,30 @@ public class PlayerAnimatorManager : MonoBehaviourPun
 
     void Update()
     {
+        #region 모든 클라이언트의 플레이어가 실행되어야 하는 코드
+
+        //현재 적용중인 애니메이터
+        AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
+
+        //공격 시 콜라이터 체크
+        if (stateInfo.IsName("Base Layer.Attack") && stateInfo.normalizedTime >= 0.55f && !isCheckAttackCollider)
+        {
+            isCheckAttackCollider = true;
+            CheckAttackCollider();
+        }
+
+        if (!stateInfo.IsName("Base Layer.Attack"))
+        {
+            isCheckAttackCollider = false;
+        }
+
+        #endregion
+
         //인스턴스가 클라이언트한테 잘 제어되고 있는지 확인
         if (photonView.IsMine == false && PhotonNetwork.IsConnected == true || !animator)
         {
             return;
         }
-
-        //현재 적용중인 애니메이터
-        AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
 
         if(!isMoveEnable)
         {
@@ -95,13 +111,6 @@ public class PlayerAnimatorManager : MonoBehaviourPun
         else
         {
             isCheckAttackCollider = false;
-        }
-
-        //공격 시 콜라이터 체크
-        if (stateInfo.IsName("Base Layer.Attack") && stateInfo.normalizedTime >= 0.55f && !isCheckAttackCollider)
-        {
-            isCheckAttackCollider = true;
-            CheckAttackCollider();
         }
     }
     //플레이어의 움직임은 FixedUpdate에서 진행
@@ -141,14 +150,14 @@ public class PlayerAnimatorManager : MonoBehaviourPun
 
             transform.rotation = Quaternion.Lerp(transform.rotation, viewRot, turnSpeed * Time.deltaTime);
 
-            if (animator.GetBool("IsRun"))
+            /*if (animator.GetBool("IsRun"))
                 rig.position += moveDir * Time.deltaTime * runSpeed;
             else
-                rig.position += moveDir * Time.deltaTime * moveSpeed;
-            /*if (animator.GetBool("IsRun"))
+                rig.position += moveDir * Time.deltaTime * moveSpeed;*/
+            if (animator.GetBool("IsRun"))
                 transform.position += moveDir * Time.deltaTime * runSpeed;
             else
-                transform.position += moveDir * Time.deltaTime * moveSpeed;*/
+                transform.position += moveDir * Time.deltaTime * moveSpeed;
         }
     }
     //공격 시 맞은 플레이어 및 장난감 체크
@@ -173,11 +182,11 @@ public class PlayerAnimatorManager : MonoBehaviourPun
         }
     }
 
-    /*void OnDrawGizmos()
+    void OnDrawGizmos()
     {
         Gizmos.color = UnityEngine.Color.red;
         Gizmos.DrawWireSphere(gizmoPos, 1);
-    }*/
+    }
 
     #region InputSystem Callback
 
