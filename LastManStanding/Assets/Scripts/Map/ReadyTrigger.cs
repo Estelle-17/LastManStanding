@@ -64,7 +64,7 @@ public class ReadyTrigger : MonoBehaviourPunCallbacks
             {
                 if (p.GetComponent<PhotonView>().IsMine == true)
                 {
-                    PhotonNetwork.Destroy(gameObject);
+                    p.GetComponent<PlayerManager>().SetDestroyPlayers();
                 }
             }
 

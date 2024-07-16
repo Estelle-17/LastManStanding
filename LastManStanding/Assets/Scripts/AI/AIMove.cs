@@ -109,7 +109,6 @@ public class AIMove : MonoBehaviour, IPunObservable
     public void CharacterDead()
     {
         agent.isStopped = true;
-        //agent.SetDestination(transform.position);
         animator.SetBool("IsDead", true);
         isDead = true;
         GetComponent<Rigidbody>().useGravity = false;

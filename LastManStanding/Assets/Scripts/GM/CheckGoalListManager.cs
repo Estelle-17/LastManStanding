@@ -174,7 +174,7 @@ public class CheckGoalListManager : MonoBehaviourPunCallbacks
             {
                 if (pm.gameObject.GetComponent<PhotonView>().IsMine == true)
                 {
-                    PhotonNetwork.Destroy(pm.gameObject);
+                    pm.SetDestroyPlayers();
                 }
             }
 

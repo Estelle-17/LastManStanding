@@ -7,16 +7,25 @@ using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class GameManagerScript : MonoBehaviourPunCallbacks
 {
+    public InputController inputControl;
+
     public GameObject playerPrefab;
     public GameObject cameraArmPrefab;
     public Image blackBackground;
 
     public TextMeshProUGUI ReadyPlayersText;
+
+    [SerializeField]
+    GameObject ExitUI;
+
+    public GameObject eventSystem;
+    public GameObject uiEventSystem;
 
     public int readyPlayersCount = 0;
 
@@ -38,6 +47,12 @@ public class GameManagerScript : MonoBehaviourPunCallbacks
         if (SceneManager.GetActiveScene().name == "InGame")
         {
             StartCoroutine(FadeOut());
+        }
+
+        inputControl = GetComponent<InputController>();
+        if (inputControl != null)
+        {
+            inputControl.playerInputControl.PlayerAction.Escape.started += VisibleExitUI;
         }
 
         if (playerPrefab == null)
@@ -65,7 +80,6 @@ public class GameManagerScript : MonoBehaviourPunCallbacks
                     player = PhotonNetwork.Instantiate(this.playerPrefab.name, new Vector3(0f, 5f, 0f), Quaternion.identity, 0);
                 }
                 cameraArm.GetComponent<PlayerCameraWork>().targetObject = player;
-
             }
             else
             {
@@ -156,9 +170,18 @@ public class GameManagerScript : MonoBehaviourPunCallbacks
         Debug.LogFormat("{0}님이 퇴장하셨습니다.", otherPlayer.NickName);
         Debug.LogFormat("현재 방에 있는 플레이어는 총 {0}명 입니다.", PhotonNetwork.CurrentRoom.PlayerCount);
     }
-    public override void OnLeftRoom()
+
+    public void VisibleExitUI(InputAction.CallbackContext context)
     {
-        //SceneChanger.Instance.MoveToLobbyScene();
+        if (context.started)
+        {
+            Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.None;
+
+            ExitUI.SetActive(true);
+            eventSystem.SetActive(false);
+            uiEventSystem.SetActive(true);
+        }
     }
 
     IEnumerator FadeOut()

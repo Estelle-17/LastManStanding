@@ -82,6 +82,22 @@ public class PlayerManager : MonoBehaviourPunCallbacks, IPunObservable
         GetComponent<CapsuleCollider>().enabled = false;
     }
 
+    public void SetDestroyPlayers()
+    {
+        photonView.RPC("DestroyPlayerRPC", RpcTarget.OthersBuffered);
+        DestroyPlayerRPC();
+    }
+
+    [PunRPC]
+    void DestroyPlayerRPC()
+    {
+        if(photonView.IsMine)
+        {
+            Debug.Log("ActorNumber " + playerActorNumber + " is Destroy");
+            PhotonNetwork.Destroy(gameObject);
+        }
+    }
+
     //InGameScene입장 시 각 플레이어들의 정보를 UI로 표현해주는 GameObject검색
     /*public void SetInGamePlayerListManager()
     {
