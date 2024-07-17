@@ -20,6 +20,12 @@ public class ReadyTrigger : MonoBehaviourPunCallbacks
     //지속적으로 로딩바 상황 업데이트
     private void Update()
     {
+        //방에 입장했을때만 갱신
+        if (!PhotonNetwork.InRoom)
+        {
+            return;
+        }
+
         //방의 모든 플레이어가 READY ZONE에 들어와있다면 Start원형 바가 채워짐
         if (gameManagerScript.readyPlayersCount == PhotonNetwork.CurrentRoom.PlayerCount)
         {

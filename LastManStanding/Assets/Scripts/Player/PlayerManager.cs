@@ -61,6 +61,12 @@ public class PlayerManager : MonoBehaviourPunCallbacks, IPunObservable
 
     void Update()
     {
+        //방에 입장했을때만 갱신
+        if(!PhotonNetwork.InRoom)
+        {
+            return;
+        }
+
         //waiting1Scene에서 현재 정보를 UI에 갱신
         if(playerListManager != null)
         {

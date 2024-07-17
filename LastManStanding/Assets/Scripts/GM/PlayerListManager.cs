@@ -16,6 +16,12 @@ public class PlayerListManager : MonoBehaviourPunCallbacks
 
     void Update()
     {
+        //방에 입장했을때만 갱신
+        if (!PhotonNetwork.InRoom)
+        {
+            return;
+        }
+
         PlayerListUpdate();
     }
 

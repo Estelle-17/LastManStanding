@@ -15,7 +15,6 @@ public class ExitRoomScript : MonoBehaviourPunCallbacks
     public void ExitRoom()
     {
         PhotonNetwork.LeaveRoom();
-        SceneChanger.Instance.MoveToLobbyScene();
     }
 
     public void ReturnGameScene()
@@ -31,6 +30,6 @@ public class ExitRoomScript : MonoBehaviourPunCallbacks
 
     public override void OnLeftRoom()
     {
-        //SceneChanger.Instance.MoveToLobbyScene();
+        SceneChanger.Instance.MoveToLobbyScene();
     }
 }

@@ -53,6 +53,7 @@ public class ChatManager : MonoBehaviourPunCallbacks
                 return;
             }
             string msg = string.Format("[{0}] {1}", PhotonNetwork.LocalPlayer.NickName, inputField.text);
+            //RPC를 통해 모든 클라이언트에게 채팅 내용 전송
             photonView.RPC("NoticeRPC", RpcTarget.OthersBuffered, msg);
             NoticeRPC(msg);
             inputField.DeactivateInputField();

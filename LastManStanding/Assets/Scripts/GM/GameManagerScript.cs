@@ -90,6 +90,12 @@ public class GameManagerScript : MonoBehaviourPunCallbacks
 
     private void Update()
     {
+        //방에 입장했을때만 갱신
+        if (!PhotonNetwork.InRoom)
+        {
+            return;
+        }
+
         CheckReadyState();
     }
 
