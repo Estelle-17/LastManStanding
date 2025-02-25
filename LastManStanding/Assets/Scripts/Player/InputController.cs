@@ -12,11 +12,11 @@ public class InputController : MonoBehaviour
         playerInputControl = new PlayerInputControl();
     }
 
-    private void OnEnable()
+    public void OnEnable()
     {
         playerInputControl.Enable();
     }
-    private void OnDisable()
+    public void OnDisable()
     {
         playerInputControl.Disable();
     }

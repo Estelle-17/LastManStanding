@@ -9,9 +9,6 @@ public class ExitRoomScript : MonoBehaviourPunCallbacks
     [SerializeField]
     GameObject ExitUI;
 
-    public GameObject eventSystem;
-    public GameObject uiEventSystem;
-
     public void ExitRoom()
     {
         PhotonNetwork.LeaveRoom();
@@ -19,13 +16,11 @@ public class ExitRoomScript : MonoBehaviourPunCallbacks
 
     public void ReturnGameScene()
     {
+        Debug.Log("게임씬으로 다시 이동");
         //마우스 커서를 고졍시키며 보이지 않도록 함
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
         ExitUI.SetActive(false);
-
-        uiEventSystem.SetActive(false);
-        eventSystem.SetActive(true);
     }
 
     public override void OnLeftRoom()

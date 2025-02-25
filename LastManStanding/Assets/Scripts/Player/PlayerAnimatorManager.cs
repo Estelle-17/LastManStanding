@@ -2,6 +2,7 @@ using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
@@ -13,6 +14,11 @@ public class PlayerAnimatorManager : MonoBehaviourPun
     public Transform attackColliderPosition;
 
     private Animator animator;
+
+    [SerializeField]
+    private GameObject JoystickObject;
+    private Joystick JoystickController;
+    
 
     [SerializeField]
     float moveSpeed = 2.5f;
@@ -43,6 +49,10 @@ public class PlayerAnimatorManager : MonoBehaviourPun
         {
             inputControl.playerInputControl.PlayerAction.Chat.started += SettingPlayerInput;
         }
+//#if UNITY_ANDROID //안드로이드에서 실행 시
+//            JoystickController = Instantiate<GameObject>(JoystickObject).GetComponent<Joystick>();
+//#endif
+        //JoystickController = Instantiate<GameObject>(JoystickObject, GameObject.Find("MainCanvas").transform).GetComponent<Joystick>();
 
         //인게임에서만 공격 허용
         if (SceneManager.GetActiveScene().name == "InGame")

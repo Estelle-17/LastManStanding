@@ -42,7 +42,11 @@ public class PlayerCameraWork : MonoBehaviourPun
         inputControl = GetComponent<InputController>();
         if(inputControl != null)
         {
+#if UNITY_EDITOR //유니티 에디터로 실행 시
             inputControl.playerInputControl.PlayerAction.Mouse.started += OnMouseMove;
+#elif UNITY_ANDROID //안드로이드에서 실행 시
+            inputControl.playerInputControl.PlayerAction.Mouse.started += OnMouseMove;
+#endif
         }
         else
         {

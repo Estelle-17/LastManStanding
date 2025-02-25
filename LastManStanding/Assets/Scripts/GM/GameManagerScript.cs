@@ -24,9 +24,6 @@ public class GameManagerScript : MonoBehaviourPunCallbacks
     [SerializeField]
     GameObject ExitUI;
 
-    public GameObject eventSystem;
-    public GameObject uiEventSystem;
-
     public int readyPlayersCount = 0;
 
     private void Start()
@@ -39,6 +36,8 @@ public class GameManagerScript : MonoBehaviourPunCallbacks
         }
         else
         {
+            //Cursor.visible = true;
+            //Cursor.lockState = CursorLockMode.None;
             Cursor.visible = false;
             Cursor.lockState = CursorLockMode.Locked;
         }
@@ -185,8 +184,6 @@ public class GameManagerScript : MonoBehaviourPunCallbacks
             Cursor.lockState = CursorLockMode.None;
 
             ExitUI.SetActive(true);
-            eventSystem.SetActive(false);
-            uiEventSystem.SetActive(true);
         }
     }
 

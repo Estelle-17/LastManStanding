@@ -464,6 +464,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   inputControl: {fileID: 0}
   attackColliderPosition: {fileID: 7236564267868712798}
+  JoystickObject: {fileID: 8603780773202691531, guid: 6f652144b77045641ad8d6a883a4ddfc, type: 3}
   moveSpeed: 2.5
   runSpeed: 5
   turnSpeed: 5
@@ -551,6 +552,58 @@ MonoBehaviour:
       m_Calls: []
     m_ActionId: 0192c6e8-4caa-40aa-b4a2-5f934a2da3cc
     m_ActionName: PlayerAction/Chat[/Keyboard/enter]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 8351a5f0-42e7-4c34-8ea0-b3ad14eba663
+    m_ActionName: PlayerAction/Escape[/Keyboard/escape]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 57741d32-c98e-4766-ae88-3ccd4d2932c1
+    m_ActionName: PlayerAction/ScreenPos[/Mouse/position]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: a8f26fc2-0cec-4504-b018-8eb799f41ca3
+    m_ActionName: PlayerAction/Press[/Mouse/leftButton,/Mouse/position]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 0370541b-d7b3-4763-8efd-9c368d4f98ed
+    m_ActionName: UI/Navigate[/Keyboard/w,/Keyboard/upArrow,/Keyboard/s,/Keyboard/downArrow,/Keyboard/a,/Keyboard/leftArrow,/Keyboard/d,/Keyboard/rightArrow]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 4f38c25b-2e23-463f-a10c-2cf652798703
+    m_ActionName: UI/Submit[/Keyboard/enter]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 75a7b5dc-4a7b-4aaa-a610-7c407fd81484
+    m_ActionName: UI/Cancel[/Keyboard/escape]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 0b3767e9-1949-4601-a39c-5841bb6a1ea2
+    m_ActionName: UI/Point[/Mouse/position]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: e45bb956-0998-465f-80ab-b2d6c7e07ad8
+    m_ActionName: UI/Click[/Mouse/leftButton]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 25ac37f7-c4dd-4fa1-bf69-992a1cedea8f
+    m_ActionName: UI/ScrollWheel[/Mouse/scroll]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: f953c8d3-c4bf-4ffe-a880-c3a6b314b8fe
+    m_ActionName: UI/MiddleClick[/Mouse/middleButton]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 1a6aab7c-af1e-4567-b26f-072f6328c00a
+    m_ActionName: UI/RightClick[/Mouse/rightButton]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 7cfbef93-5574-41ce-9c77-4420968d7b77
+    m_ActionName: UI/TrackedDevicePosition
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 065ba3f5-07b6-42aa-899a-8ca936d2e05d
+    m_ActionName: UI/TrackedDeviceOrientation
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: PC
   m_DefaultActionMap: PlayerAction
